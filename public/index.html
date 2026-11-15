@@ -17,6 +17,8 @@
     button:hover { background: #4752c4; }
     button.secondary { background: #49423a; }
     #account { display: none; justify-content: center; align-items: center; gap: 14px; margin: 22px 0; }
+    #link-preference { display: flex; justify-content: center; align-items: center; gap: 9px; margin: 22px 0 8px; color: #d0c6ba; font-size: .95rem; cursor: pointer; }
+    #link-preference input { width: 17px; height: 17px; accent-color: #5865f2; }
     #links { display: grid; gap: 12px; margin-top: 22px; }
     .link-card { display: block; padding: 18px 20px; border: 1px solid #64513f; border-radius: 12px; background: #302921; color: inherit; text-decoration: none; transition: border-color .15s, transform .15s; }
     .link-card:hover { border-color: #c6a875; transform: translateY(-2px); }
@@ -35,6 +37,7 @@
     <section id="login-panel"><button id="login">Log in with Discord</button></section>
     <section id="account" aria-live="polite"><span id="username"></span><button id="logout" class="secondary">Log out</button></section>
     <p id="status" role="status">Checking sign-in…</p>
+    <label id="link-preference"><input id="new-tab-toggle" type="checkbox" checked> Open links in a new tab</label>
     <section id="links" aria-label="Available links"></section>
     <p id="empty">You’re signed in, but no links are available for your current server memberships.</p>
     <footer>Access is checked with Discord when you sign in and load this page.</footer>
@@ -46,7 +49,16 @@
     const status = document.querySelector('#status');
     const links = document.querySelector('#links');
     const empty = document.querySelector('#empty');
+    const newTabToggle = document.querySelector('#new-tab-toggle');
     let csrfToken = '';
+    try {
+      const savedPreference = localStorage.getItem('tjo-open-links-in-new-tab');
+      if (savedPreference !== null) newTabToggle.checked = savedPreference === 'true';
+    } catch {}
+    newTabToggle.addEventListener('change', () => {
+      try { localStorage.setItem('tjo-open-links-in-new-tab', String(newTabToggle.checked)); } catch {}
+      links.querySelectorAll('a').forEach(link => { link.target = newTabToggle.checked ? '_blank' : '_self'; });
+    });
     function showSignIn() {
       login.textContent = 'Log in with Discord';
       login.onclick = () => { location.href = '/auth/discord'; };
@@ -60,7 +72,7 @@
     function renderLinks(items) {
       links.replaceChildren(...items.map(link => {
         const a = document.createElement('a');
-        a.className = 'link-card'; a.href = link.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+        a.className = 'link-card'; a.href = link.url; a.target = newTabToggle.checked ? '_blank' : '_self'; a.rel = 'noopener noreferrer';
         const title = document.createElement('strong'); title.textContent = link.title;
         const desc = document.createElement('span'); desc.textContent = link.description;
         a.append(title, desc); return a;
