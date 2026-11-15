@@ -1,0 +1,86 @@
+{
+    "guildIds":  [
+                     "815546526385700904",
+                     "1340804247586869299",
+                     "1378576093942120609",
+                     "869432845754589235"
+                 ],
+    "links":  [
+                  {
+                      "id":  "codex",
+                      "title":  "Codex",
+                      "description":  "The Jedi Order Codex",
+                      "url":  "https://docs.google.com/document/d/1C3u3gjtVJx-ClGVhw5JZi3Kn3FFGUPK6JjAdWHKbpqg/edit?tab=t.0",
+                      "access":  "everyone"
+                  },
+                  {
+                      "id":  "penalties",
+                      "title":  "Table of Penalties",
+                      "description":  "The Table of Penalties",
+                      "url":  "https://docs.google.com/spreadsheets/d/1ODZcpU-ngCUE3SvAEZhEFT5GEcY56j8aTX-nm1oPO5o/edit?usp=drivesdk",
+                      "access":  "everyone"
+                  },
+                  {
+                      "id":  "database",
+                      "title":  "Academy Database",
+                      "description":  "The academy database",
+                      "url":  "https://docs.google.com/spreadsheets/d/1ez0XCaBFUmmtEPSCsq0UwaMjALWkCL0zd1E_CaBmqhk/edit?gid=855584882#gid=855584882",
+                      "access":  {
+                                     "any":  [
+                                                 {
+                                                     "guildId":  "1340804247586869299"
+                                                 }
+                                             ]
+                                 }
+                  },
+                  {
+                      "id":  "training",
+                      "title":  "Training Guides",
+                      "description":  "Training guides",
+                      "url":  "https://docs.google.com/document/d/1ahML3jSph1JSv5_bTDDLpwEcxgkTTeFC9Fk7y0jCNds/edit?tab=t.0",
+                      "access":  {
+                                     "any":  [
+                                                 {
+                                                     "guildId":  "1340804247586869299",
+                                                     "roleIds":  [
+                                                                     "1340810088176160798"
+                                                                 ]
+                                                 },
+                                                 {
+                                                     "guildId":  "815546526385700904",
+                                                     "roleIds":  [
+                                                                     "815546526385700904",
+                                                                     "815549799046447105"
+                                                                 ]
+                                                 }
+                                             ]
+                                 }
+                  },
+                  {
+                      "id":  "ji-handbook",
+                      "title":  "JI Handbook",
+                      "description":  "The JI handbook",
+                      "url":  "https://docs.google.com/document/d/1Vpsl-O4t20KnFUR6NlB7jmWe-Fa1nlb7BwMjS93VCOE/edit?usp=sharing",
+                      "access":  {
+                                     "any":  [
+                                                 {
+                                                     "guildId":  "1378576093942120609"
+                                                 }
+                                             ]
+                                 }
+                  },
+                  {
+                    "id": "Enforcement-Guide",
+                    "title": "Enforcement Guide",
+                    "description": "The Enforcement Guide",
+                    "url": "https://docs.google.com/document/d/1nDbSDkjK5-NKYDVpLELPIqep6Ia0Duj654gPD_lKxHY/edit?usp=sharing",
+                    "access": {
+                                    "any": [
+                                            {
+                                                "guildId": "1378576093942120609"
+                                            }
+                                            ]
+                                    }
+                  }
+              ]
+}

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Order Links</title>
+    <link rel="icon" type="image/x-icon" href="https://akamaihd.net">
+    <meta property="og:title" content="Jedi Order Links">
+    <style>
+        html, body {
+            font-family: sans-serif;
+            background-image: url("https://magnific.com");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .container {
+            background-image: linear-gradient(to right, rgba(50, 50, 50, 0.8), rgba(55, 40, 30, 0.6));
+            padding: 40px;
+            border-radius: 20px;
+            border: none; 
+            box-shadow: 
+                0 0 20px rgba(0, 0, 0, 0.5),           
+                inset 0 0 0 4px rgba(1, 11, 1, 0.395);  
+            color: white;
+            width: 1000px;
+            min-height: 450px;
+            position: relative;
+            letter-spacing: 2px;
+            display: flex;
+            flex-direction: column;    
+            justify-content: flex-start;   
+            align-items: center;       
+            text-align: center;        
+        }
+
+        .container h1 {
+            letter-spacing: 4px;
+            text-shadow: 2px 2px 0px #000;
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+
+        .controls-wrapper {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .select-style {
+            background-image: linear-gradient(to right, rgba(60, 60, 60, 0.9), rgba(65, 50, 40, 0.8));
+            color: white;
+            border: 2px solid rgba(1, 11, 1, 0.4);
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            width: 250px;
+            text-align: center;
+        }
+
+        .select-style option {
+            background-color: #2b241f;
+            color: white;
+        }
+
+        .select-style:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .links-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+        }
+
+        a {
+            color: rgba(255, 255, 255, 1);
+            font-weight: bold;
+            text-decoration: none; 
+            display: inline-flex;  
+            align-items: center;
+        }
+
+        a:hover {
+            color: #0814bd; 
+            text-shadow: 0 0 10px rgba(18, 6, 185, 0.6); 
+            transition: 0.2s; 
+        }
+
+        .hidden-document {
+            display: none !important;
+        }
+
+        .music-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(55, 40, 30, 0.6);
+            border: 2px solid rgba(1, 11, 1, 0.395);
+            color: white;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            line-height: 1;
+            font-size: 20px;
+            transition: 0.3s;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .music-btn.playing {
+            animation: bounce 0.6s infinite ease-in-out;
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(55, 40, 30, 0.6);
+        }
+
+        #music-time {
+            color: rgba(55, 40, 30, 1);
+            font-family: monospace;
+            position: fixed;
+            top: 70px;
+            left: 20px;
+            z-index: 9999;
+            text-shadow: 1px 1px 2px black;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <h1>Jedi Order Links</h1>
+
+        <div class="controls-wrapper">
+            <select id="rank" class="select-style" onchange="updateAccessRules()">
+                <option value="" disabled selected>Select Rank</option>
+                <option value="initiate">Initiate</option>
+                <option value="youngling">Youngling I-III</option>
+                <option value="knight">Jedi Knight+</option>
+            </select>
+
+            <select id="pathway" class="select-style" onchange="updateAccessRules()">
+                <option value="" disabled selected>Select Pathway</option>
+                <option value="none">None</option>
+                <option value="ji">JI</option>
+                <option value="student">Academy Student</option>
+                <option value="both">Both (JI & Student)</option>
+            </select>
+        </div>
+
+        <div class="links-wrapper">
+            <p id="doc-codex">
+                <a href="https://google.com" target="_blank">
+                    <img src="https://rbxcdn.com" style="width: 20px; vertical-align: middle; margin-right: 8px;">
+                    Click here to enter the Codex!              
+                </a>        
+            </p>
+
+            <p id="doc-training">
+                <a href="https://google.com" target="_blank">
+                    <img src="https://rbxcdn.com" style="width: 20px; vertical-align: middle; margin-right: 8px;">
+                    Click here to enter the Training Guides!   
+                </a>
+            </p>
+
+            <p id="doc-database">
+                <a href="https://google.com" target="_blank">
+                    <img src="https://rbxcdn.com" style="width: 20px; vertical-align: middle; margin-right: 8px;">
+                    Click here to enter the academy database!
+                </a>
+            </p>
+
+            <p id="doc-penalties">
+                <a href="https://google.com" target="_blank">
+                    <img src="https://rbxcdn.com" style="width: 20px; vertical-align: middle; margin-right: 8px;">
+                    Click here to enter the Table of Penalties!
+                </a>
+            </p>
+
+            <p id="doc-ji-handbook">
+                <a href="https://google.com" target="_blank">
+                    <img src="https://rbxcdn.com" style="width: 20px; vertical-align: middle; margin-right: 8px;">
+                    Click here to enter the JI handbook!
+                </a>
+            </p>
+        </div>
+    </div>
+     
+    <audio id="bg-music" loop>
+        <source src="https://nocookie.net" type="audio/flac">
+    </audio>
+
+    <button id="play-btn" onclick="playMusic()" class="music-btn">🎵</button>
+    <span id="music-time">0:00</span>
+  
+<script>
+  window.onload = function() {
+    const audio = document.getElementById("bg-music");
+    const btn = document.getElementById("play-btn");
+    const timeDisplay = document.getElementById("music-time");
+
+    window.playMusic = function() {
+      if (audio.paused) {
+        audio.play().then(() => {
+          btn.classList.add("playing");
+        }).catch(err => {
+          console.log("Music error:", err);
+        });
+      } else {
+        audio.pause();
+        audio.currentTime = 0;
+        btn.classList.remove("playing");
+        timeDisplay.innerText = "0:00";
+      }
+    };
+
+    audio.addEventListener('timeupdate', () => {
+      const mins = Math.floor(audio.currentTime / 60);
+      const secs = Math.floor(audio.currentTime % 60);
+      timeDisplay.innerText = mins + ":" + secs.toString().padStart(2, '0');
+    });
+
+    updateAccessRules();
+  };
+
+  function updateAccessRules() {
+      const rankSelect = document.getElementById("rank");
+      const pathwaySelect = document.getElementById("pathway");
+      
+      const currentRank = rankSelect.value;
+      let currentPathway = pathwaySelect.value;
+
+      // Element References
+      const codex = document.getElementById("doc-codex");
+      const training = document.getElementById("doc-training");
+      const database = document.getElementById("doc-database");
+      const penalties = document.getElementById("doc-penalties");
+      const jiHandbook = document.getElementById("doc-ji-handbook");
+
+      // Enable/reset dropdown option restriction configurations
+      pathwaySelect.disabled = false;
+document.querySelector('#pathway option[value="student"]').disabled = false;
+document.querySelector('#pathway option[value="both"]').disabled = false;
+// 1. DROPDOWN SELECTION LOCK RULES
+if (currentRank === "youngling") {
+pathwaySelect.value = "none";
+pathwaySelect.disabled = true;
+currentPathway = "none";
+}
+else if (currentRank === "knight") {
+// Knight can select JI or None, but Student / Both roles are forbidden
+document.querySelector('#pathway option[value="student"]').disabled = true;
+document.querySelector('#pathway option[value="both"]').disabled = true;
+if (currentPathway === "student" || currentPathway === "both") {
+pathwaySelect.value = "none";
+currentPathway = "none";
+}
+}
+// 2. DOCUMENT HIDING RULES ENGINE
+// Hide all links by default until valid selections are verified
+[codex, training, database, penalties, jiHandbook].forEach(el => el.classList.add("hidden-document"));
+if (currentRank === "youngling") {
+// Youngling I-III only has the Codex available
+codex.classList.remove("hidden-document");
+}
+else if (currentRank === "knight") {
+// Jedi Knight+ has everything available, Training Guides always remain visible
+[codex, training, database, penalties, jiHandbook].forEach(el => el.classList.remove("hidden-document"));
+}
+else if (currentRank === "initiate" || currentRank === "") {
+// If Pathway dropdown is blank/none, keep all items hidden
+if (currentPathway !== "none" && currentPathway !== "") {
+// Always show Codex for pathway members
+codex.classList.remove("hidden-document");
+if (currentPathway === "ji") {
+jiHandbook.classList.remove("hidden-document");
+}
+else if (currentPathway === "student") {
+training.classList.remove("hidden-document");
+database.classList.remove("hidden-document");
+penalties.classList.remove("hidden-document");
+}
+else if (currentPathway === "both") {
+[training, database, penalties, jiHandbook].forEach(el => el.classList.remove("hidden-document"));
+}
+}
+}
+}
+document.querySelectorAll('.no-preview').forEach(link => {
+const originalUrl = link.getAttribute('href');
+link.addEventListener('mouseover', function() {
+this.removeAttribute('href');
+});
+link.addEventListener('mouseout', function() {
+this.setAttribute('href', originalUrl);
+});
+link.addEventListener('click', function(e) {
+e.preventDefault();
+window.open(originalUrl, '_blank');
+});
+});

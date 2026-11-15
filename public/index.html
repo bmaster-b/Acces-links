@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#211d1a">
+  <title>[beta] Jedi Order Links</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, sans-serif; background: #171614; color: #f7f3ed; }
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; margin: 0; display: grid; place-items: center; padding: 24px; background: radial-gradient(ellipse at top, #514032, #171614 68%); }
+    main { width: min(760px, 100%); padding: clamp(28px, 6vw, 56px); border: 1px solid #74614b; border-radius: 20px; background: #211d1ae8; box-shadow: 0 20px 70px #0008; }
+    h1 { margin: 0 0 12px; text-align: center; letter-spacing: .06em; }
+    .intro, #status { color: #d0c6ba; text-align: center; line-height: 1.6; }
+    #login-panel { display: grid; justify-items: center; gap: 18px; padding: 28px 0 8px; }
+    button { font: inherit; border: 0; border-radius: 10px; padding: 12px 20px; color: white; background: #5865f2; font-weight: 700; cursor: pointer; }
+    button:hover { background: #4752c4; }
+    button.secondary { background: #49423a; }
+    #account { display: none; justify-content: center; align-items: center; gap: 14px; margin: 22px 0; }
+    #links { display: grid; gap: 12px; margin-top: 22px; }
+    .link-card { display: block; padding: 18px 20px; border: 1px solid #64513f; border-radius: 12px; background: #302921; color: inherit; text-decoration: none; transition: border-color .15s, transform .15s; }
+    .link-card:hover { border-color: #c6a875; transform: translateY(-2px); }
+    .link-card strong { display: block; margin-bottom: 4px; }
+    .link-card span { color: #c0b5a7; font-size: .94rem; }
+    #empty { display: none; color: #d0c6ba; text-align: center; }
+    .error { color: #ffb7a8 !important; }
+    footer { margin-top: 30px; text-align: center; color: #91877b; font-size: .8rem; }
+    @media (max-width: 520px) { body { padding: 14px; } main { padding: 26px 20px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>[BETA] Jedi Order Links</h1>
+    <p class="intro">Sign in with Discord to see the resources available to your account.</p>
+    <section id="login-panel"><button id="login">Log in with Discord</button></section>
+    <section id="account" aria-live="polite"><span id="username"></span><button id="logout" class="secondary">Log out</button></section>
+    <p id="status" role="status">Checking sign-in…</p>
+    <section id="links" aria-label="Available links"></section>
+    <p id="empty">You’re signed in, but no links are available for your current server memberships.</p>
+    <footer>Access is checked with Discord when you sign in and load this page.</footer>
+  </main>
+  <script>
+    const login = document.querySelector('#login');
+    const loginPanel = document.querySelector('#login-panel');
+    const account = document.querySelector('#account');
+    const status = document.querySelector('#status');
+    const links = document.querySelector('#links');
+    const empty = document.querySelector('#empty');
+    let csrfToken = '';
+    function showSignIn() {
+      login.textContent = 'Log in with Discord';
+      login.onclick = () => { location.href = '/auth/discord'; };
+    }
+    function showAccount(data) {
+      loginPanel.style.display = 'none';
+      account.style.display = 'flex';
+      document.querySelector('#username').textContent = `Signed in as ${data.user.username}`;
+      csrfToken = data.csrfToken;
+    }
+    function renderLinks(items) {
+      links.replaceChildren(...items.map(link => {
+        const a = document.createElement('a');
+        a.className = 'link-card'; a.href = link.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+        const title = document.createElement('strong'); title.textContent = link.title;
+        const desc = document.createElement('span'); desc.textContent = link.description;
+        a.append(title, desc); return a;
+      }));
+      empty.style.display = items.length ? 'none' : 'block';
+    }
+    showSignIn();
+    document.querySelector('#logout').addEventListener('click', async () => {
+      await fetch('/auth/logout', { method: 'POST', headers: { 'X-CSRF-Token': csrfToken } });
+      location.reload();
+    });
+    async function loadAccess() {
+      try {
+        const response = await fetch('/api/me');
+        const data = await response.json();
+        if (response.status === 401) {
+          loginPanel.style.display = 'grid';
+          showSignIn();
+          status.textContent = data.message || (new URLSearchParams(location.search).has('login') ? 'Discord sign-in was cancelled.' : 'Log in to see your available links.');
+          return;
+        }
+        if (data.signedIn) showAccount(data);
+        if (!response.ok) {
+          if (data.signedIn) renderLinks(data.links || []);
+          throw new Error(data.message || 'Could not check your Discord access.');
+        }
+        status.textContent = 'Your access has been checked.';
+        renderLinks(data.links);
+      } catch (error) {
+        status.textContent = error.message;
+        status.classList.add('error');
+        login.textContent = 'Retry access check';
+        login.onclick = loadAccess;
+        loginPanel.style.display = 'grid';
+      }
+    }
+    loadAccess();
+  </script>
+</body>
+</html>
